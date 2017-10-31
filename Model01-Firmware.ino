@@ -7,109 +7,23 @@
 #endif
 
 
-/**
-   These #include directives pull in the Kaleidoscope firmware core,
-   as well as the Kaleidoscope plugins we use in the Model 01's firmware
-*/
-
-
-// The Kaleidoscope core
 #include "Kaleidoscope.h"
-
-// Support for keys that move the mouse
 #include "Kaleidoscope-MouseKeys.h"
-
-// Support for macros
 #include "Kaleidoscope-Macros.h"
-
-// Support for controlling the keyboard's LEDs
 #include "Kaleidoscope-LEDControl.h"
-
-// Support for "Numlock" mode, which is mostly just the Numlock specific LED mode
 #include "Kaleidoscope-Numlock.h"
-
-// Support for an "LED off mode"
 #include "LED-Off.h"
-
-// Support for the "Boot greeting" effect, which pulses the 'LED' button for 10s
-// when the keyboard is connected to a computer (or that computer is powered on)
 #include "Kaleidoscope-LEDEffect-BootGreeting.h"
-
-// Support for an LED mode that makes all the LEDs 'breathe'
 #include "Kaleidoscope-LEDEffect-Breathe.h"
-
-// Support for an LED mode that lights up the keys as you press them
 #include "Kaleidoscope-LED-Stalker.h"
-
-// Support for Keyboardio's internal keyboard testing mode
 #include "Kaleidoscope-Model01-TestMode.h"
-
-// allow shift to create left and right parens when pressed
-#include "Kaleidoscope-SpaceCadet.h"
-
 #include <Kaleidoscope-TapDance.h>
-
-/** This 'enum' is a list of all the macros used by the Model 01's firmware
-    The names aren't particularly important. What is important is that each
-    is unique.
-
-    These are the names of your macros. They'll be used in two places.
-    The first is in your keymap definitions. There, you'll use the syntax
-    `M(MACRO_NAME)` to mark a specific keymap position as triggering `MACRO_NAME`
-
-    The second usage is in the 'switch' statement in the `macroAction` function.
-    That switch statement actually runs the code associated with a macro when
-    a macro key is pressed.
-*/
 
 enum { MACRO_VERSION_INFO,
        MACRO_ANY,
        MACRO_PIPE,
        SPACE_PERIOD
      };
-
-
-
-/** The Model 01's key layouts are defined as 'keymaps'. By default, there are three
-    keymaps: The standard QWERTY keymap, the "Function layer" keymap and the "Numpad"
-    keymap.
-
-    Each keymap is defined as a list using the 'KEYMAP_STACKED' macro, built
-    of first the left hand's layout, followed by the right hand's layout.
-
-    Keymaps typically consist mostly of `Key_` definitions. There are many, many keys
-    defined as part of the USB HID Keyboard specification. You can find the names
-    (if not yet the explanations) for all the standard `Key_` defintions offered by
-    Kaleidoscope in these files:
-       https://github.com/keyboardio/Kaleidoscope/blob/master/src/key_defs_keyboard.h
-       https://github.com/keyboardio/Kaleidoscope/blob/master/src/key_defs_consumerctl.h
-       https://github.com/keyboardio/Kaleidoscope/blob/master/src/key_defs_sysctl.h
-       https://github.com/keyboardio/Kaleidoscope/blob/master/src/key_defs_keymaps.h
-
-    Additional things that should be documented here include
-      using ___ to let keypresses fall through to the previously active layer
-      using XXX to mark a keyswitch as 'blocked' on this layer
-      using ShiftToLayer() and LockLayer() keys to change the active keymap.
-      the special nature of the PROG key
-      keeping NUM and FN consistent and accessible on all layers
-
-
-    The "keymaps" data structure is a list of the keymaps compiled into the firmware.
-    The order of keymaps in the list is important, as the ShiftToLayer(#) and LockLayer(#)
-    macros switch to key layers based on this list.
-
-
-
-    A key defined as 'ShiftToLayer(FUNCTION)' will switch to FUNCTION while held.
-    Similarly, a key defined as 'LockLayer(NUMPAD)' will switch to NUMPAD when tapped.
-*/
-
-/**
-    Layers are "0-indexed" -- That is the first one is layer 0. The second one is layer 1.
-    The third one is layer 2.
-    This 'enum' lets us use names like QWERTY, FUNCTION, and NUMPAD in place of
-    the numbers 0, 1 and 2.
-*/
 
 enum { QWERTY, FUNCTION, NUMPAD, NUMBERS }; // layers
 
@@ -264,91 +178,27 @@ void tapDanceAction(uint8_t tap_dance_index, uint8_t tap_count,
   }
 }
 
-// These 'solid' color effect definitions define a rainbow of
-// LED color modes calibrated to draw 500mA or less on the
-// Keyboardio Model 01.
-
-/** The 'setup' function is one of the two standard Arduino sketch functions.
-    It's called when your keyboard first powers up. This is where you set up
-    Kaleidoscope and any plugins.
-*/
 void setup() {
-  Kaleidoscope.use(&SpaceCadet);
-
-  //Set the keymap with a 250ms timeout per-key
-  //Setting is {KeyThatWasPressed, AlternativeKeyToSend, TimeoutInMS}
-  //Note: must end with the SPACECADET_MAP_END delimiter
-  static kaleidoscope::SpaceCadet::KeyBinding spacecadetmap[] = {
-    {Key_LeftShift, Key_LeftParen, 250}
-    , {Key_RightShift, Key_RightParen, 250}
-    , {Key_LeftGui, Key_LeftCurlyBracket, 250}
-    , {Key_RightAlt, Key_RightCurlyBracket, 250}
-    , {Key_LeftAlt, Key_RightCurlyBracket, 250}
-    , {Key_LeftControl, Key_LeftBracket, 250}
-    , {Key_RightControl, Key_RightBracket, 250}
-    , SPACECADET_MAP_END
-  };
-  //Set the map.
-  SpaceCadet.map = spacecadetmap;
-  // First, call Kaleidoscope's internal setup function
   Kaleidoscope.setup();
 
-  // Next, tell Kaleidoscope which plugins you want to use.
-  // The order can be important. For example, LED effects are
-  // added in the order they're listed here.
   Kaleidoscope.use(
-    // The boot greeting effect pulses the LED button for 10 seconds after the keyboard is first connected
     &BootGreetingEffect,
-
-    // The hardware test mode, which can be invoked by tapping Prog, LED and the left Fn button at the same time.
-    &TestMode,
-
-    // LEDControl provides support for other LED modes
     &LEDControl,
-
-    // We start with the LED effect that turns off all the LEDs.
     &LEDOff,
-
-    // The breathe effect slowly pulses all of the LEDs on your keyboard
     &LEDBreatheEffect,
-
-    // The stalker effect lights up the keys you've pressed recently
     &StalkerEffect,
-
-    // The numlock plugin is responsible for lighting up the 'numpad' mode
-    // with a custom LED effect
     &NumLock,
-
-    // The macros plugin adds support for macros
     &Macros,
-
-    // The MouseKeys plugin lets you add keys to your keymap which move the mouse.
     &MouseKeys,
-
     &TapDance
   );
 
-  // While we hope to improve this in the future, the NumLock plugin
-  // needs to be explicitly told which keymap layer is your numpad layer
   NumLock.numPadLayer = NUMPAD;
 
-  // The LED Stalker mode has a few effects. The one we like is
-  // called 'BlazingTrail'. For details on other options,
-  // see https://github.com/keyboardio/Kaleidoscope-LED-Stalker
   StalkerEffect.variant = STALKER(Haunt);
 
-  // We want to make sure that the firmware starts with LED effects off
-  // This avoids over-taxing devices that don't have a lot of power to share
-  // with USB devices
   LEDOff.activate();
 }
-
-/** loop is the second of the standard Arduino sketch functions.
-    As you might expect, it runs in a loop, never exiting.
-
-    For Kaleidoscope-based keyboard firmware, you usually just want to
-    call Kaleidoscope.loop(); and not do anything custom here.
-*/
 
 void loop() {
   Kaleidoscope.loop();
