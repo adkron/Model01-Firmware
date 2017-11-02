@@ -46,7 +46,7 @@ const Key keymaps[][ROWS][COLS] PROGMEM = {
    Key_Enter,     Key_Y, Key_U, Key_I,     Key_O,         Key_P,         Key_Equals,
                   Key_H, Key_J, Key_K,     Key_L,         Key_Semicolon, Key_Quote,
    LGUI(LALT(LCTRL(Key_Spacebar))),  Key_N, Key_M, Key_Comma, Key_Period,    Key_Slash,     Key_Minus,
-   Key_RightShift, Key_LeftAlt, Key_Spacebar, Key_RightControl,
+   Key_RightShift, Key_LeftAlt, TD(SPACE_PERIOD), Key_RightControl,
    ShiftToLayer(NUMBERS)),
 
   [FUNCTION] =  KEYMAP_STACKED
