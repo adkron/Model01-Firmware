@@ -1,11 +1,10 @@
 // -*- mode: c++ -*-
-// Copyright 2016 Keyboardio, inc. <jesse@keyboard.io>
+// Copyright 2017 Amos King <amos@binarynoggin.com>
 // See "LICENSE" for license details
 
 #ifndef BUILD_INFORMATION
 #define BUILD_INFORMATION "locally built"
 #endif
-
 
 #include "Kaleidoscope.h"
 #include "Kaleidoscope-MouseKeys.h"
