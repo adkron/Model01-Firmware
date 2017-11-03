@@ -17,6 +17,7 @@ get going on my own firmware.
  * set fn q to |> for elixir dev
 
 # Download and install
+
 ```sh
 make flash
 ```
