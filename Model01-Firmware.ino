@@ -184,7 +184,7 @@ void tapDanceAction(uint8_t tap_dance_index, byte row, byte col, uint8_t tap_cou
   switch (tap_dance_index) {
   case SPACE_PERIOD:
     return tapDanceActionKeys(tap_count, tap_dance_action,
-                              Key_Spacebar, M(MACRO_PERIOD_SPACE));
+                              Key_Spacebar, M(MACRO_PERIOD_SPACE), Key_Period);
   }
 }
 
