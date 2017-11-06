@@ -188,6 +188,32 @@ void tapDanceAction(uint8_t tap_dance_index, byte row, byte col, uint8_t tap_cou
   }
 }
 
+static void lightNumberLayer() {
+  LEDControl.setCrgbAt(2, 1, CRGB(255, 0, 0));
+  LEDControl.setCrgbAt(2, 2, CRGB(255, 0, 0));
+  LEDControl.setCrgbAt(2, 3, CRGB(255, 0, 0));
+  LEDControl.setCrgbAt(2, 4, CRGB(255, 0, 0));
+  LEDControl.setCrgbAt(2, 5, CRGB(255, 0, 0));
+
+  LEDControl.setCrgbAt(2, 10, CRGB(255, 0, 0));
+  LEDControl.setCrgbAt(2, 11, CRGB(255, 0, 0));
+  LEDControl.setCrgbAt(2, 12, CRGB(255, 0, 0));
+  LEDControl.setCrgbAt(2, 13, CRGB(255, 0, 0));
+  LEDControl.setCrgbAt(2, 14, CRGB(255, 0, 0));
+  return;
+}
+
+static void layerColorOverride(bool post_clear) {
+  if (!post_clear)
+    return;
+  if (Layer.isOn(NUMBERS)) {
+    lightNumberLayer();
+    return;
+  }
+
+  return;
+}
+
 void setup() {
   Kaleidoscope.setup();
 
@@ -206,6 +232,8 @@ void setup() {
   NumLock.numPadLayer = NUMPAD;
 
   StalkerEffect.variant = STALKER(Haunt);
+
+  Kaleidoscope.useLoopHook(layerColorOverride);
 
   LEDOff.activate();
 }
