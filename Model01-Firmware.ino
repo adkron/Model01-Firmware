@@ -33,7 +33,6 @@ enum { QWERTY, FUNCTION, NUMPAD, NUMBERS }; // layers
 */
 // *INDENT-OFF*
 
-static uint16_t errorTimeout;
 const Key keymaps[][ROWS][COLS] PROGMEM = {
 
   [QWERTY] = KEYMAP_STACKED
@@ -130,10 +129,19 @@ static void periodSpaceMacro(uint8_t keyState) {
 }
 
 static void numberMovedError(uint8_t keyState) {
+  static uint16_t errorTimeout, col;
   if (keyToggledOn(keyState)) {
     errorTimeout = millis() + 1000;
-    LEDControl.setCrgbAt(2, Macros.col, CRGB(0, 255, 0));
-    LEDControl.setCrgbAt(0, Macros.col, CRGB(255, 0, 0));
+    col = Macros.col;
+  }
+
+  if (errorTimeout && millis() < errorTimeout) {
+    LEDControl.setCrgbAt(2, col, CRGB(0, 255, 0));
+    LEDControl.setCrgbAt(0, col, CRGB(255, 0, 0));
+  } else if (millis() >= errorTimeout) {
+    LEDControl.refreshAt(2, col);
+    LEDControl.refreshAt(0, col);
+    errorTimeout = 0;
   }
 }
 
@@ -222,11 +230,6 @@ static void layerColorOverride(bool post_clear) {
     return;
   if (Layer.isOn(NUMBERS)) {
     lightNumberLayer();
-    return;
-  }
-  if (errorTimeout && millis() > errorTimeout) {
-    LEDControl.set_all_leds_to(0, 0, 0);
-    errorTimeout = 0;
     return;
   }
 
