@@ -16,7 +16,7 @@
 #include "Kaleidoscope-LEDEffect-Breathe.h"
 #include "Kaleidoscope-LED-Stalker.h"
 #include "Kaleidoscope-Model01-TestMode.h"
-#include <Kaleidoscope-TapDance.h>
+#include "Kaleidoscope-Model01-TestMode.h"
 
 enum { MACRO_VERSION_INFO,
        MACRO_ANY,
@@ -46,8 +46,8 @@ const Key keymaps[][ROWS][COLS] PROGMEM = {
    M(MACRO_ANY),  M(NUM_MOVE), M(NUM_MOVE), M(NUM_MOVE),     M(NUM_MOVE),         M(NUM_MOVE),         Key_KeypadNumLock,
    Key_Enter,     Key_Y, Key_U, Key_I,     Key_O,         Key_P,         Key_Equals,
                   Key_H, Key_J, Key_K,     Key_L,         Key_Semicolon, Key_Quote,
-   LGUI(LALT(LCTRL(Key_Spacebar))),  Key_N, Key_M, Key_Comma, LSHIFT(Key_Period),    Key_Slash,     Key_Minus,
-   Key_RightShift, Key_LeftAlt, TD(SPACE_PERIOD), Key_RightControl,
+   LGUI(LALT(LCTRL(Key_Spacebar))),  Key_N, Key_M, Key_Comma, Key_Period,    Key_Slash,     Key_Minus,
+   Key_RightShift, Key_LeftAlt, Key_Spacebar, Key_RightControl,
    ShiftToLayer(NUMBERS)),
 
   [FUNCTION] =  KEYMAP_STACKED
@@ -119,12 +119,6 @@ static void versionInfoMacro(uint8_t keyState) {
 static void pipeMacro(uint8_t keyState) {
   if (keyToggledOn(keyState)) {
     Macros.type(PSTR("|>"));
-  }
-}
-
-static void periodSpaceMacro(uint8_t keyState) {
-  if (keyToggledOn(keyState)) {
-    Macros.type(PSTR(". "));
   }
 }
 
@@ -201,15 +195,6 @@ const macro_t *macroAction(uint8_t macroIndex, uint8_t keyState) {
   return MACRO_NONE;
 }
 
-void tapDanceAction(uint8_t tap_dance_index, byte row, byte col, uint8_t tap_count,
-                    kaleidoscope::TapDance::ActionType tap_dance_action) {
-  switch (tap_dance_index) {
-  case SPACE_PERIOD:
-    return tapDanceActionKeys(tap_count, tap_dance_action,
-                              Key_Spacebar, Key_Period, M(MACRO_PERIOD_SPACE));
-  }
-}
-
 static void lightNumberLayer() {
   LEDControl.setCrgbAt(2, 1, CRGB(255, 0, 0));
   LEDControl.setCrgbAt(2, 2, CRGB(255, 0, 0));
@@ -241,14 +226,14 @@ void setup() {
 
   Kaleidoscope.use(
     &BootGreetingEffect,
+    &TestMode,
     &LEDControl,
     &LEDOff,
     &LEDBreatheEffect,
     &StalkerEffect,
     &NumLock,
     &Macros,
-    &MouseKeys,
-    &TapDance
+    &MouseKeys
   );
 
   NumLock.numPadLayer = NUMPAD;
