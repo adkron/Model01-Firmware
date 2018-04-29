@@ -36,14 +36,14 @@ enum { QWERTY, FUNCTION, NUMPAD, NUMBERS }; // layers
 const Key keymaps[][ROWS][COLS] PROGMEM = {
 
   [QWERTY] = KEYMAP_STACKED
-  (Key_Escape,          M(NUM_MOVE), M(NUM_MOVE), M(NUM_MOVE), M(NUM_MOVE), M(NUM_MOVE), Key_LEDEffectNext,
+  (Key_Escape,          XXX, XXX, XXX, XXX, XXX, Key_LEDEffectNext,
    Key_Backtick, Key_Q, Key_W, Key_E, Key_R, Key_T, Key_Tab,
    Key_PageUp,   Key_A, Key_S, Key_D, Key_F, Key_G,
    Key_PageDown, Key_Z, Key_X, Key_C, Key_V, Key_B, Key_Escape,
    Key_LeftControl, Key_Backspace, Key_LeftGui, Key_LeftShift,
    ShiftToLayer(FUNCTION),
 
-   M(MACRO_ANY),  M(NUM_MOVE), M(NUM_MOVE), M(NUM_MOVE),     M(NUM_MOVE),         M(NUM_MOVE),         Key_KeypadNumLock,
+   M(MACRO_ANY),  XXX, XXX, XXX,     XXX,         XXX,         LCTRL(Key_D),
    Key_Enter,     Key_Y, Key_U, Key_I,     Key_O,         Key_P,         Key_Equals,
                   Key_H, Key_J, Key_K,     Key_L,         Key_Semicolon, Key_Quote,
    LGUI(LALT(LCTRL(Key_Spacebar))),  Key_N, Key_M, Key_Comma, Key_Period,    Key_Slash,     Key_Minus,
@@ -174,10 +174,6 @@ const macro_t *macroAction(uint8_t macroIndex, uint8_t keyState) {
 
     case MACRO_VERSION_INFO:
       versionInfoMacro(keyState);
-      break;
-
-    case MACRO_PERIOD_SPACE:
-      periodSpaceMacro(keyState);
       break;
 
     case MACRO_ANY:
