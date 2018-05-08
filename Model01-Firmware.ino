@@ -23,7 +23,9 @@ enum { MACRO_VERSION_INFO,
        MACRO_PIPE,
        SPACE_PERIOD,
        MACRO_PERIOD_SPACE,
-       NUM_MOVE
+       NUM_MOVE,
+       AUDACITY_CUT_ALL_TRACKS,
+       AUDACITY_SILENCE_TRACK
      };
 
 enum { QWERTY, FUNCTION, NUMPAD, NUMBERS }; // layers
@@ -36,7 +38,7 @@ enum { QWERTY, FUNCTION, NUMPAD, NUMBERS }; // layers
 const Key keymaps[][ROWS][COLS] PROGMEM = {
 
   [QWERTY] = KEYMAP_STACKED
-  (Key_Escape,          XXX, XXX, XXX, XXX, XXX, Key_LEDEffectNext,
+  (Key_Escape,   M(AUDACITY_CUT_ALL_TRACKS), M(AUDACITY_SILENCE_TRACK), XXX, XXX, XXX, Key_LEDEffectNext,
    Key_Backtick, Key_Q, Key_W, Key_E, Key_R, Key_T, Key_Tab,
    Key_PageUp,   Key_A, Key_S, Key_D, Key_F, Key_G,
    Key_PageDown, Key_Z, Key_X, Key_C, Key_V, Key_B, Key_Escape,
@@ -182,6 +184,35 @@ const macro_t *macroAction(uint8_t macroIndex, uint8_t keyState) {
 
     case MACRO_PIPE:
       pipeMacro(keyState);
+      break;
+
+    case AUDACITY_CUT_ALL_TRACKS:
+      return MACRODOWN(
+          T(P),
+          W(100),
+          D(LeftGui),
+          D(LeftShift),
+          T(K),
+          U(LeftShift),
+          T(K),
+          U(LeftGui)
+          );
+      break;
+
+    case AUDACITY_SILENCE_TRACK:
+      return MACRODOWN(
+        T(P),
+        W(100),
+        D(LeftGui),
+        T(L),
+        U(LeftGui)
+        /*W(100),*/
+        /*D(LeftShift),*/
+        /*T(K),*/
+        /*U(LeftShift),*/
+        /*W(100),*/
+        /*T(Space)*/
+      );
       break;
 
     case NUM_MOVE:
